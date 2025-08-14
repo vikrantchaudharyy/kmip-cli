@@ -1,0 +1,29 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: make deps
+
+    - name: Build for Linux and Windows
+      run: |
+        make build-linux
+        make build-windows
+
+    - name: Upload Binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: kmip-cli-binaries
+        path: build/
